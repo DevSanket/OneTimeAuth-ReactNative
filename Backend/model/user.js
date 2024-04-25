@@ -27,8 +27,8 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-ApplyFormSchema.index({ location: "2dsphere" });
-ApplyFormSchema.methods.setPassword = function (password, callback) {
+UserSchema.index({ location: "2dsphere" });
+UserSchema.methods.setPassword = function (password, callback) {
   const promise = new Promise((resolve, reject) => {
     if (!password) reject(new Error("MISSING_PASSWORD"));
 
