@@ -17,6 +17,7 @@ import MainNavigator from './src/Navigator/MainNavigator';
 export default function App() {
   const [userData, setUserData] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
+
   return (
     <AlertNotificationRoot theme="light">
       <GestureHandlerRootView style={{flex: 1}}>

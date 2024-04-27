@@ -9,6 +9,7 @@ import AppText from '../../Components/BasicComponents/AppText';
 import AppTextInput from '../../Components/BasicFormComponents/TextInput';
 import CommonButton from '../../Components/BasicComponents/CommonButton';
 import Colors from '../../common/DefaultColors';
+import {LoginUserAPI} from '../../ApiCalls/Authentication';
 
 type Props = {
   navigation: StackNavigationProp<any, any>;
@@ -32,19 +33,19 @@ export default function Login({navigation}: Props) {
     }
     setLoading(true);
 
-    // const data = await LoginUserAPI({mobile_no, password, language});
+    const data = await LoginUserAPI({mobile_no, password});
     setLoading(false);
 
-    // if (data?.error) {
-    //   ErrorToast(data.error);
-    // }
+    if (data?.error) {
+      ErrorToast(data.error);
+    }
 
-    // if (data) {
-    //   //@ts-ignore
-    //   logIn(data.data);
-    //   //@ts-ignore
-    //   setUserData(data.data);
-    // }
+    if (data) {
+      //@ts-ignore
+      logIn(data.data);
+      //@ts-ignore
+      setUserData(data.data);
+    }
   };
 
   return (
