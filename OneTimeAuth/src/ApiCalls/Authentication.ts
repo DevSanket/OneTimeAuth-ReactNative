@@ -12,7 +12,7 @@ type SendOTPProps = {
 export const SendOTP = async ({mobile_no, type}: SendOTPProps) => {
   let validate = false;
   await axios
-    .post(`${Config.BACKEND_URL}/auth/sendOTP`, {
+    .post(`${Config.BACKEND_URL}/auth/send_otp`, {
       mobile_no,
       type: type ? type : null,
     })
@@ -43,9 +43,9 @@ export const VerifyTheOTP = async ({
   let validate = false;
 
   await axios
-    .post(`${Config.BACKEND_URL}/auth/verifyOTP`, {
+    .post(`${Config.BACKEND_URL}/auth/verify_otp`, {
       mobile_no,
-      otpCode: otp,
+      OTPCode: otp,
     })
     .then(res => {
       if (res.data.accessToken) {
@@ -73,7 +73,7 @@ type RegisterFarmerProps = {
 };
 
 //Registration API
-export const RegisterTheFarmer = async ({user_data}: RegisterFarmerProps) => {
+export const RegisterTheUser = async ({user_data}: RegisterFarmerProps) => {
   let validate = false;
   await axios
     .post(`${Config.BACKEND_URL}/auth/register`, {
@@ -119,7 +119,7 @@ export const getUserProfile = async (token: string) => {
   let data: User | null = null;
   try {
     await axios
-      .get(`${Config.BACKEND_URL}/auth/get_profile`, {
+      .get(`${Config.BACKEND_URL}/auth/getUser`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

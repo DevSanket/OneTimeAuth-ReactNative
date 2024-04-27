@@ -1,21 +1,32 @@
+const bcrypt = require("bcryptjs/dist/bcrypt");
 const { Auth, Utility } = require("../common");
 const Model = require("../model");
 const { default: axios } = require("axios");
 
-async function sendOtp(phone, otp) {
-  const response = await axios
-    .get(
-      `https://www.fast2sms.com/dev/bulkV2?authorization=${process.env.MSG_API_KEY}&route=otp&variables_values=${otp}&flash=0&numbers=${phone}`
-    )
-    .then((res) => {
-      return true;
-    })
-    .catch((err) => {
-      return false;
-    });
+async function generateOTP() {
+  var digits = "0123456789";
+  let OTP = "";
+  for (let i = 0; i < 6; i++) {
+    OTP += digits[Math.floor(Math.random() * 10)];
+  }
 
-  return response;
-  // return true;
+  return OTP;
+}
+
+async function sendOtp(phone, otp) {
+  // const response = await axios
+  //   .get(
+  //     `https://www.fast2sms.com/dev/bulkV2?authorization=${process.env.MSG_API_KEY}&route=otp&variables_values=${otp}&flash=0&numbers=${phone}`
+  //   )
+  //   .then((res) => {
+  //     return true;
+  //   })
+  //   .catch((err) => {
+  //     return false;
+  //   });
+
+  // return response;
+  return true;
 }
 
 module.exports.SendMobileOTP = async (req, res) => {
@@ -58,6 +69,7 @@ module.exports.SendMobileOTP = async (req, res) => {
 
     return res.status(200).json({ msg: "SUCCESSFULLY DONE" });
   } catch (error) {
+    console.log(error);
     return res.status(400).json({ error: "Syntax Error" });
   }
 };
@@ -65,15 +77,19 @@ module.exports.SendMobileOTP = async (req, res) => {
 module.exports.Verify_OTP = async (req, res) => {
   try {
     const { mobile_no, OTPCode } = req.body;
-    const Get_OTP = await Model.Otp.find({ phone_no: mobile_no });
+    const Get_OTP = await Model.Otp.findOne({ phone_no: mobile_no });
+
     if (!Get_OTP) {
       return res.status(400).json({ error: "Not  OTP Found" });
     }
+    console.log(Get_OTP.otp, OTPCode);
 
     if (Get_OTP.otp === OTPCode) {
       if (new Date() > Get_OTP.expirationTime) {
         return res.status(400).json({ error: "OTP Expired" });
       }
+
+      console.log("Verified");
 
       const UpdateOTP = await Model.Otp.findOneAndUpdate(
         {
@@ -122,13 +138,15 @@ module.exports.Verify_OTP = async (req, res) => {
       return res.status(200).json({
         msg: "Verification Successfull",
       });
+    } else {
+      return res.status(400).json({ error: "OTP is Invalid" });
     }
   } catch (error) {
     return res.status(400).json({ error: "Verification Failed" });
   }
 };
 
-module.exports.RegisterUser = async () => {
+module.exports.RegisterUser = async (req, res) => {
   try {
     //Check OTP Exists
     const CheckIsThereOTP = await Model.Otp.findOne({
@@ -169,7 +187,7 @@ module.exports.RegisterUser = async () => {
   }
 };
 
-module.exports.LoginUser = async () => {
+module.exports.LoginUser = async (req, res) => {
   try {
     if (req.body.mobile_no) {
       let User = await Model.User.findOne({
@@ -218,12 +236,27 @@ module.exports.LoginUser = async () => {
   }
 };
 
-module.exports.getProfile = async () => {
+module.exports.getProfile = async (req, res) => {
   try {
     const User = req.user;
     User.password = "";
     return res.status(200).json({ msg: "Successfully Fetched", data: User });
   } catch (error) {
     return res.status(400).json({ error: "Error While Gettting User" });
+  }
+};
+
+module.exports.ForgotPassword = async (req, res) => {
+  try {
+    let password = await bcrypt.hash(req.body.password, 10);
+    const User = await Model.User.findOneAndUpdate(
+      { mobile_no: req.body.mobile_no },
+      { $set: { password: password } },
+      { new: true }
+    );
+
+    return res.status(200).json({ msg: "Password Updated Successfully" });
+  } catch (error) {
+    return res.status(400).json({ error: "FAILED TO UPDATE PASSWORD" });
   }
 };

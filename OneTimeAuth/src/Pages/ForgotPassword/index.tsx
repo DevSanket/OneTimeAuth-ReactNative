@@ -1,9 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useContext, useState} from 'react';
-import Screen from '../../components/BasicComponents/Screen';
-import AppText from '../../components/BasicComponents/AppText';
 import Colors from '../../common/DefaultColors';
-
 import AppContext from '../../context/context';
 import {NavigationProps} from '../../common/types';
 import {ErrorToast, SuccessToast} from '../../common/CustomToast';
@@ -12,6 +9,8 @@ import GetMobileNo from '../../Components/RegisterPageComponents/GetMobileNo';
 import VerifyOTP from '../../Components/RegisterPageComponents/VerifyOTP';
 import AppTextInput from '../../Components/BasicFormComponents/TextInput';
 import CommonButton from '../../Components/BasicComponents/CommonButton';
+import Screen from '../../Components/BasicComponents/Screen';
+import AppText from '../../Components/BasicComponents/AppText';
 
 export default function ForgotPassword({navigation}: NavigationProps) {
   const [create_password, setCreatePassword] = useState('');

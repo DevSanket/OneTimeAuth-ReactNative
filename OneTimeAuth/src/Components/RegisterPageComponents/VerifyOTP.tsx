@@ -4,6 +4,8 @@ import Screen from '../BasicComponents/Screen';
 import AppText from '../BasicComponents/AppText';
 import CommonButton from '../BasicComponents/CommonButton';
 import OTPInputs from './OTPInputs';
+import {VerifyTheOTP} from '../../ApiCalls/Authentication';
+import {SuccessToast} from '../../common/CustomToast';
 
 interface IProps {
   Mobile_No: string;
@@ -21,17 +23,16 @@ export default function VerifyOTP({
   const handleVerifyOTP = async () => {
     let OTP = otp.join('');
 
-    // const check = await VerifyTheOTP({
-    //   mobile_no: Mobile_No,
-    //   otp: OTP,
-    //   setAccessToken,
-    //   language,
-    // });
-    // if (check) {
-    //   setVerifyOTP(true);
-    //   SuccessToast(LanguageFile[language].OTP_Send_Successfully);
-    //   return;
-    // }
+    const check = await VerifyTheOTP({
+      mobile_no: Mobile_No,
+      otp: OTP,
+      setAccessToken,
+    });
+    if (check) {
+      setVerifyOTP(true);
+      SuccessToast('OTP Verified Successfully');
+      return;
+    }
   };
 
   return (

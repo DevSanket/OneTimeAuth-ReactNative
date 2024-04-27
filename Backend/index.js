@@ -29,19 +29,19 @@ const mongodb = async () => {
 };
 
 //Cors Settings
-var whitelist = ["http://localhost:3000"];
-var corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-};
+// var whitelist = ["http://localhost:3000"];
+// var corsOptions = {
+//   origin: function (origin, callback) {
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+// };
 
 //Middlewares
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(logger("dev"));
 app.use("/api", Route);
 app.get("/", (req, res) => {

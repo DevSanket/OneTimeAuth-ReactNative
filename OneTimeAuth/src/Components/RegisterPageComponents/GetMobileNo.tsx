@@ -10,11 +10,12 @@ import React, {useContext, useState} from 'react';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {StackNavigationProp} from '@react-navigation/stack';
 import AppContext from '../../context/context';
-import {ErrorToast} from '../../common/CustomToast';
+import {ErrorToast, SuccessToast} from '../../common/CustomToast';
 import Screen from '../BasicComponents/Screen';
 import AppText from '../BasicComponents/AppText';
 import AppTextInput from '../BasicFormComponents/TextInput';
 import CommonButton from '../BasicComponents/CommonButton';
+import {SendOTP} from '../../ApiCalls/Authentication';
 
 type Props = {
   navigation: StackNavigationProp<any, any>;
@@ -38,17 +39,16 @@ export default function GetMobileNo({
       return;
     }
     setLoading(true);
-    // const check = await SendOTP({
-    //   mobile_no: phone_no,
-    //   type: type ? type : null,
-    //   language: language,
-    // });
+    const check = await SendOTP({
+      mobile_no: phone_no,
+      type: type ? type : null,
+    });
     setLoading(false);
-    // if (check) {
-    //   setMobileNo(phone_no);
-    //   Set_Send_OTP(true);
-    //   SuccessToast(LanguageFile[language].OTP_Send_Successfully);
-    // }
+    if (check) {
+      setMobileNo(phone_no);
+      Set_Send_OTP(true);
+      SuccessToast('OTP Send Successfully');
+    }
   };
 
   return (
