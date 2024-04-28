@@ -19,7 +19,7 @@ import SplashScreen from 'react-native-splash-screen';
 
 export default function App() {
   const [userData, setUserData] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const {width} = Dimensions.get('window');
 
   const RestoreDetails = async () => {

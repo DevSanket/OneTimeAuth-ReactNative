@@ -35,10 +35,10 @@ export default function ForgotPassword({navigation}: NavigationProps) {
 
     if (Success) {
       SuccessToast('Password Changed Successfully');
+      navigation.navigate('Login');
     } else {
-      ErrorToast('Password Not Changed');
+      ErrorToast('Server Issue');
     }
-    navigation.navigate('Login');
   };
 
   return (
